@@ -123,8 +123,8 @@
   var maxY = garden.clientHeight - ball.clientHeight;
 
   function moveBall(rotation) {
-    var x = info[1];
-    var y = info[2];
+    var x = rotation[1];
+    var y = rotation[2];
 
     if(typeof x === 'Number' && typeof y === 'Number') {
       if(x > 90) {
