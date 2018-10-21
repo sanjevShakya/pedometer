@@ -109,13 +109,17 @@
 
   function rotationHandler(rotation) {
     var info,
-      xyz = '[X, Y, Z]';
+      xyz = '[X, Y, Z]', rotation;
 
-    info = xyz.replace('X', rotation.alpha && rotation.alpha.toFixed(3));
-    info = info.replace('Y', rotation.beta && rotation.beta.toFixed(3));
-    info = info.replace('Z', rotation.gamma && rotation.gamma.toFixed(3));
+    info = xyz.replace('Z', rotation.alpha && rotation.alpha.toFixed(3));
+    info = info.replace('X', rotation.beta && rotation.beta.toFixed(3));
+    info = info.replace('Y', rotation.gamma && rotation.gamma.toFixed(3));
 
-    moveBall(info);
+    rotation = {
+      X: rotation.beta && rotation.beta.toFixed(3) || 0,
+      Y: rotation.gamma && rotation.gamma.toFixed(3) || 0
+    }
+    moveBall(rotation);
     moRotation.innerHTML = info;
   }
 
@@ -123,8 +127,8 @@
   var maxY = garden.clientHeight - ball.clientHeight;
 
   function moveBall(rotation) {
-    var x = rotation[1];
-    var y = rotation[2];
+    var x = rotation['X'];
+    var y = rotation['Y'];
 
     if(typeof x === 'Number' && typeof y === 'Number') {
       if(x > 90) {
