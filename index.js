@@ -1,7 +1,7 @@
-;(function() {
+(function() {
   var app = document.getElementById('app');
 
-  var moInternal = createElementAndAppendTo('moInternal', app); 
+  var moInternal = createElementAndAppendTo('moInternal', app);
   var moAccel = createElementAndAppendTo('moAccel', app);
   var moAccelGrav = createElementAndAppendTo('moAccelGrav', app);
   var moRotation = createElementAndAppendTo('moRotation', app);
@@ -14,7 +14,7 @@
   var styles = {
     gardenStyles: {
       position: 'relative',
-      width : '200px',
+      width: '200px',
       height: '200px',
       border: '5px solid #CCC',
       borderRadius: '10px',
@@ -27,31 +27,31 @@
       height: '20px',
       background: 'aqua',
       borderRadius: '100%',
-    }
-  }
-  
+    },
+  };
+
   applyStylesToElem(garden, styles.gardenStyles);
   applyStylesToElem(ball, styles.ball);
 
   function applyStylesToElem(elem, style = {}) {
     Object.keys(style).forEach(function(st) {
-      elem.style[st] = style[st]
+      elem.style[st] = style[st];
     });
   }
 
   app.appendChild(moInternal);
 
   function createElementAndAppendTo(id, parent) {
-      var elm = document.createElement('div');
-      elm.setAttribute('id', id);
-      parent.appendChild(elm);
-      return elm;
+    var elm = document.createElement('div');
+    elm.setAttribute('id', id);
+    parent.appendChild(elm);
+    return elm;
   }
 
   if ('LinearAccelerationSensor' in window && 'Gyroscope' in window) {
     let lastReadingTimestamp;
     let accelerometer = new LinearAccelerationSensor();
-    
+
     accelerometer.addEventListener('reading', e => {
       if (lastReadingTimestamp) {
         intervalHandler(
@@ -93,8 +93,7 @@
 
     window.addEventListener('devicemotion', onDeviceMotion, false);
   } else {
-    moApi.innerHTML =
-      'No Accelerometer & Gyroscope API available';
+    moApi.innerHTML = 'No Accelerometer & Gyroscope API available';
   }
 
   function accelerationHandler(acceleration, targetElem) {
@@ -109,16 +108,17 @@
 
   function rotationHandler(rotation) {
     var info,
-      xyz = '[X, Y, Z]', rotation;
+      xyz = '[X, Y, Z]',
+      rotation;
 
     info = xyz.replace('Z', rotation.alpha && rotation.alpha.toFixed(3));
     info = info.replace('X', rotation.beta && rotation.beta.toFixed(3));
     info = info.replace('Y', rotation.gamma && rotation.gamma.toFixed(3));
 
     rotation = {
-      X: rotation.beta && rotation.beta.toFixed(3) || 0,
-      Y: rotation.gamma && rotation.gamma.toFixed(3) || 0
-    }
+      X: (rotation.beta && rotation.beta.toFixed(3)) || 0,
+      Y: (rotation.gamma && rotation.gamma.toFixed(3)) || 0,
+    };
     moveBall(rotation);
     moRotation.innerHTML = info;
   }
@@ -127,26 +127,22 @@
   var maxY = garden.clientHeight - ball.clientHeight;
 
   function moveBall(rotation) {
-    var x = rotation['X'];
-    var y = rotation['Y'];
+    var x = Number(rotation['X']);
+    var y = Number(rotation['Y']);
 
-    if(typeof x === 'Number' && typeof y === 'Number') {
-      if(x > 90) {
-        x = 90;
-      };
-  
-      if(y < -90) {
-        y = -90
-      }
-  
-      x += 90;
-      y += 90;
-  
-      ball.style.top = (maxX * x /180 - 10) + 'px';
-      ball.style.left = (maxY * y /180 - 10) + 'px';
+    if (x > 90) {
+      x = 90;
     }
 
-    
+    if (y < -90) {
+      y = -90;
+    }
+
+    x += 90;
+    y += 90;
+
+    ball.style.top = (maxX * x) / 180 - 10 + 'px';
+    ball.style.left = (maxY * y) / 180 - 10 + 'px';
   }
 
   function intervalHandler(interval) {
